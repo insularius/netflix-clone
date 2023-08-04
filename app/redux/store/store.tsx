@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import commentsReducer from "../comments/comments";
 import likeReducer from "../likes/likes";
 import checkReducer from "../check/check";
