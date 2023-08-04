@@ -53,9 +53,6 @@ const VideoModal: React.FC<ModalProps> = ({
     setSelectedGenre(event.target.value as string);
   };
 
-  console.log(playingUrl, "playing url");
-  console.log(videoUrl, "video url");
-
   const handleInfoClick = () => {
     setInfoModal(true);
   };
