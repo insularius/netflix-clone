@@ -1,0 +1,102 @@
+.headerContainer {
+  max-width: 100%;
+  height: 100vh;
+  background-image: url(/images/header-image.png);
+  background-size: cover;
+  background-position: center;
+  padding: 10px 8%;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-blend-mode: overlay;
+}
+.logo {
+  width: 150px;
+  height: 40px;
+}
+
+.formControl {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.signInButton {
+  width: 76px;
+  height: 32px;
+  border: 0;
+  outline: 0;
+  background: #db0001;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.contentContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 1000px;
+}
+.heading {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+  max-width: 100%;
+  color: white;
+}
+.subheading {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: white;
+  margin-top: 16px;
+}
+.formContainer {
+  background: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  overflow: hidden;
+}
+.emailInput {
+  flex: 1;
+  border: 0;
+  width: 350px;
+  outline: 0;
+  margin-left: 20px;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid gray;
+}
+.getStartedButton {
+  width: 210px;
+  height: 56px;
+  border: 0;
+  outline: 0;
+  background: #db0001;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 4px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+.select {
+  width: 140px;
+  height: 32px;
+  border: 1px solid gray;
+  outline: 0;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  font: inherit;
+}
