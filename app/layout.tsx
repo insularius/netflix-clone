@@ -1,7 +1,9 @@
 import { ThemeProvider } from "@mui/material";
+// import { Provider } from "react-redux";
 import { AuthProvider } from "./context/auth";
 import { CommentsProvider } from "./context/commentsContext";
 import "./globals.css";
+import ReduxProvider from "./redux/reduxProvider/reduxProvider";
 import { theme } from "./theme/theme";
 
 export default function RootLayout({
@@ -12,11 +14,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider theme={theme}>
-          <AuthProvider>
+        <ReduxProvider>
+          <ThemeProvider theme={theme}>
             <CommentsProvider>{children}</CommentsProvider>
-          </AuthProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

@@ -1,33 +1,76 @@
-import { Category, VideoData } from "@/app/types/naiza";
-import { Typography, Box, Button } from "@mui/material";
+import { Category } from "@/app/types/firebase";
+import { Typography, Box, Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player";
 import VideoModal from "../customModal/videoModal";
 import VideoPlayer from "../videoPlayer/videoPlayer";
+import { Show } from "@/app/types/firebase";
+import { useDispatch } from "react-redux";
+import { setAdminCode } from "@/app/redux/auth/auth";
+import { AppDispatch } from "@/app/redux/store/store";
+import { Router } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 type Props = {
-  videos: VideoData[];
+  videos: Show[];
   categories: Category[];
   activeCategory: number | null;
+  selectedVideo: Show | null;
 };
 
 const VideoPanels: React.FC<Props> = ({
   videos,
   categories,
   activeCategory,
+  selectedVideo,
 }) => {
-  const filteredVideos = videos.filter((video) => video.id === activeCategory);
+  const dispatch = useDispatch<AppDispatch>();
+  const [adminCode, setAdminCodeState] = useState("");
+  const router = useRouter();
+  // const filteredVideos = videos.filter((video) => video.id === activeCategory);
+
+  // const filteredVideos = videos.filter((video) =>
+  //   (video.categoryIds || []).includes(
+  //     activeCategory ? activeCategory.toString() : ""
+  //   )
+  // );
+
+  const checkAdminCode = () => {
+    dispatch(setAdminCode(adminCode))
+      .then((result: any) => {
+        if (result.payload === "admin") {
+          console.log("if result payload === admin");
+          console.log("Result payload login page: ", result.payload);
+          router.push("/admin");
+        }
+      })
+      .catch((error: any) => {
+        console.log("Invalid code", error);
+      });
+  };
+
+  const filteredVideos = videos.filter((video) =>
+    video.categoryIds.includes(`categoryId${activeCategory}`)
+  );
+
   const selectedCategory = categories.find(
     (category) => category.id === activeCategory
   );
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [playingVideoUrl, setPlayingVideoUrl] = useState<string | null>(null);
+  const [localSelectedVideo, setLocalSelectedVideo] = useState<Show | null>(
+    null
+  );
+  const [selectedShowId, setSelectedShowId] = useState<number | null>(null);
 
-  const handleVideoClick = (videoUrl: string) => {
+  const handleVideoClick = (videoUrl: string, video: Show, showId: number) => {
     setSelectedVideoUrl(videoUrl);
+    setLocalSelectedVideo(video);
+    setSelectedShowId(showId);
     setModalOpen(true);
   };
+
   const handleCloseModal = () => {
     setSelectedVideoUrl(null);
     setModalOpen(false);
@@ -48,7 +91,7 @@ const VideoPanels: React.FC<Props> = ({
                 color: "white",
               }}
             >
-              {category.attributes?.name}
+              {category?.name}
             </Typography>
           ))}
 
@@ -56,12 +99,11 @@ const VideoPanels: React.FC<Props> = ({
         sx={{
           display: "flex",
           overflowX: "auto",
-          width: "900px",
           margin: "100px 40px",
           gap: "20px",
         }}
       >
-        {filteredVideos.map((video) => (
+        {filteredVideos.map((video, index) => (
           <Box
             sx={{
               flex: "0 0 auto",
@@ -69,10 +111,10 @@ const VideoPanels: React.FC<Props> = ({
               height: "180px",
               position: "relative",
             }}
-            key={video.id}
+            key={video.title}
           >
             <Button
-              onClick={() => handleVideoClick(video.attributes.video_url)}
+              onClick={() => handleVideoClick(video.url, video, video.id)}
               sx={{
                 position: "absolute",
                 top: 0,
@@ -87,22 +129,10 @@ const VideoPanels: React.FC<Props> = ({
               }}
             >
               <Image
-                src="/images/feature-4.png"
-                alt={video.attributes.title}
+                src={video.thumbnail}
+                alt={video.title}
                 layout="fill"
                 objectFit="cover"
-              />
-              <Image
-                src="/images/netflix-logo.webp"
-                alt=""
-                width={30}
-                height={40}
-                style={{
-                  zIndex: "1",
-                  position: "absolute",
-                  top: "0px",
-                  left: "0px",
-                }}
               />
             </Button>
           </Box>
@@ -114,12 +144,31 @@ const VideoPanels: React.FC<Props> = ({
           onClose={handleCloseModal}
           videos={videos}
           category={selectedCategory}
-          onClick={handleVideoClick}
           videoUrl={selectedVideoUrl}
           playingUrl={playingVideoUrl}
           setPlayingUrl={setPlayingVideoUrl}
+          selectedVideo={selectedVideo}
+          localSelectedVideo={localSelectedVideo}
+          selectedShowId={selectedShowId}
         />
       )}
+      <Box>
+        <TextField
+          label="Enter Admin Code"
+          variant="outlined"
+          value={adminCode}
+          onChange={(e) => setAdminCodeState(e.target.value)}
+          sx={{
+            background: "#333",
+            width: " 10%",
+            display: "flex",
+            flexDirection: "column",
+            "& label": { color: "#8c8c8c" },
+            "& input": { color: "#8c8c8c" },
+          }}
+        />
+        <Button onClick={checkAdminCode}>Check Admin Code</Button>
+      </Box>
     </Box>
   );
 };

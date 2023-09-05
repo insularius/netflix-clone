@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -19,6 +19,11 @@ import { styled } from "@mui/system";
 import Image from "next/image";
 import styles from "../header/styles.module.css";
 import { useAuth } from "@/app/context/auth";
+import { useDispatch } from "react-redux";
+import type { AppDispatch, RootState } from "../../redux/store/store";
+import { resetRedirect, signup } from "../../redux/_auth/auth";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 const StyledButton = styled(Button)`
   width: 210px;
   height: 56px;
@@ -51,24 +56,43 @@ const Header = () => {
     en: "English",
     kz: "Qazaq",
   };
-  const { signup } = useAuth();
+  useEffect(() => {
+    console.log(window?.innerWidth, window?.innerHeight);
+  });
+
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const isRedirectAllowed = useSelector(
+    (state: RootState) => state.auth.isRedirectAllowed
+  );
+
+  useEffect(() => {
+    if (isRedirectAllowed) {
+      router.push("/signup/password");
+      dispatch(resetRedirect());
+    }
+  }, [isRedirectAllowed, router, dispatch]);
+
   const handleEmailChange = (event: any) => {
     setEmail(event.target.value);
     setEmailError(!validateEmail(event.target.value));
   };
+
   function validateEmail(email: string) {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      await signup(email);
+      await dispatch(signup(email));
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
     <Box className={styles.headerContainer}>
       <Container maxWidth="lg">
@@ -92,6 +116,7 @@ const Header = () => {
                 className={styles.select}
                 sx={{
                   color: "white",
+                  font: "inherit",
                   "& .MuiSvgIcon-root": {
                     fill: "white",
                   },
@@ -130,6 +155,7 @@ const Header = () => {
                   },
                 }}
                 className={styles.signInButton}
+                href="/login"
               >
                 Sign In
               </SignInButton>
@@ -192,7 +218,7 @@ const Header = () => {
               }}
             >
               <TextField
-                sx={{ border: "1px solid gray" }}
+                sx={{ border: "1px solid gray", marginLeft: "20px" }}
                 className={styles.emailInput}
                 label="Email address"
                 name="email"

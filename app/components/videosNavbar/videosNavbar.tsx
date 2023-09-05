@@ -4,12 +4,12 @@ import NotificationsIcon from "@mui/icons-material/NotificationsOutlined";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import React from "react";
-import { Category } from "@/app/types/naiza";
+import { Category } from "@/app/types/firebase";
 import Image from "next/image";
 
 type Props = {
   categories: Category[];
-  onCategoryClick: (categoryId: number) => void; // добавлен обработчик кликов
+  onCategoryClick: (categoryId: number) => void;
 };
 
 const VideosNavbar: React.FC<Props> = ({ categories, onCategoryClick }) => {
@@ -37,7 +37,7 @@ const VideosNavbar: React.FC<Props> = ({ categories, onCategoryClick }) => {
                   ":hover": { color: "white" },
                 }}
               >
-                {category.attributes?.name}
+                {category.name}
               </Typography>
             ))}
           </Box>

@@ -42,10 +42,11 @@ import {
 } from "../types/griffon";
 // import { toast } from "react-toastify";
 // import { useNavigate } from "react-router-dom";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import instance from "../services/axiosInstance";
 import { sendOtp } from "../types/authProvide";
-// import { sendOtp } from "../types/authProvide";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store/store";
 
 interface AuthContextProps {
   sid: string;
@@ -121,7 +122,7 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [sid, setSid] = useState<string>("");
   const [profile, setProfile] = useState<Profile>();
   const [isRedirectAllowed, setIsRedirectAllowed] = useState<boolean>(false);
-
+  const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(() => {
     if (typeof window === "undefined") {
       return false;
@@ -170,14 +171,14 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     }
   };
 
-  //   useEffect(() => {
-  //     if (isRedirectAllowed) {
-  //       //   toast.success("Email verification passed!");
-  //       console.log("Email verification passed!");
-  //       router.push("/videos");
-  //       setIsRedirectAllowed(false);
-  //     }
-  //   }, [isRedirectAllowed, router]);
+  useEffect(() => {
+    if (isRedirectAllowed) {
+      //   toast.success("Email verification passed!");
+      console.log("Email verification passed!");
+      router.push("/signup/password");
+      setIsRedirectAllowed(false);
+    }
+  }, [isRedirectAllowed, router]);
 
   useEffect(() => {
     const profileInfoString = localStorage.getItem(PROFILE_STORAGE_KEY);

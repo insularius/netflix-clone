@@ -1,3 +1,4 @@
+"use client";
 import { Box } from "@mui/system";
 import {
   FormControl,
@@ -18,42 +19,57 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import styles from "./videoInfoModal.module.css";
-import { Category, VideoData } from "@/app/types/naiza";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleLike } from "../../redux/likes/likes";
 import { RootState } from "@/app/redux/store/store";
 import { AppDispatch } from "@/app/redux/store/store";
 import { toggleCheck } from "@/app/redux/check/check";
-
+import { Category, Show, Episode } from "@/app/types/firebase";
+import VideoPlayer from "../videoPlayer/videoPlayer";
 type ModalProps = {
   open: boolean;
   onClose: () => void;
-  category: Category | undefined;
-  videos: VideoData[];
-  onClick: (videoUrl: string) => void;
+  closeVideoModal: () => void;
+  openVideoModal: boolean;
   videoUrl: string | null;
   playingUrl: string | null;
   setPlayingUrl: (url: string) => void;
+  selectedShowId: number | null;
+  handlePlayClick: () => void;
+  videoData: Show | null;
+  categories: Category[];
+  episodesData: Episode[];
+  onSeasonChange: (event: SelectChangeEvent<string>) => void;
+  selectedSeason: string;
 };
-
 const VideoInfoModal: React.FC<ModalProps> = ({
   open,
   onClose,
-  onClick,
+  openVideoModal,
+  closeVideoModal,
   videoUrl,
-  videos,
   playingUrl,
   setPlayingUrl,
-  category,
+  selectedShowId,
+  handlePlayClick,
+  videoData,
+  onSeasonChange,
+  episodesData,
+  categories,
+  selectedSeason,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const isLiked = useSelector((state: RootState) => state.likes.isLiked);
   const isCheked = useSelector((state: RootState) => state.check.isChecked);
 
-  const [selectedSeason, setSelectedSeason] = useState("s1");
-  const handleSeasonChange = (event: SelectChangeEvent<string>) => {
-    setSelectedSeason(event.target.value);
+  const generateSeasonsArray = (num: number): string[] => {
+    return Array.from({ length: num }, (_, i) => `S${i + 1}`);
+  };
+
+  const getSeasonLabel = (season: string): string => {
+    const seasonNumber = season.slice(1);
+    return `Season ${seasonNumber}`;
   };
 
   return (
@@ -82,10 +98,12 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                 }}
               >
                 <Image
-                  src="/images/witcher-cover.webp"
+                  src={videoData?.thumbnail!}
                   alt=""
                   width={700}
                   height={400}
+                  objectFit="cover"
+                  objectPosition="center"
                 />
                 <Box
                   sx={{
@@ -101,6 +119,7 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                     variant="contained"
                     startIcon={<PlayArrowIcon />}
                     className={styles.buttonStyle}
+                    onClick={handlePlayClick}
                     sx={{
                       backgroundColor: "rgba(128, 128, 128, 0.7)",
                       color: "white",
@@ -134,12 +153,14 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                   </IconButton>
                 </Box>
                 <Box sx={{ position: "absolute", bottom: 80, left: 30 }}>
-                  <Image
-                    src="/images/the-witcher.png"
-                    alt=""
-                    width={200}
-                    height={76}
-                  />
+                  {selectedShowId === 1 ? (
+                    <Image
+                      src="/images/the-witcher.png"
+                      alt=""
+                      width={200}
+                      height={76}
+                    />
+                  ) : null}
                 </Box>
                 <Box
                   sx={{
@@ -176,7 +197,7 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                     sx={{
                       backgroundColor: "rgba(0, 0, 0, 0.5)",
                       color: "white",
-                      "&:hover": { backgroundColor: "black" },
+                      "&:hover": { backgroundColor: "white", color: "black" },
                     }}
                   >
                     <CloseIcon color="inherit" />
@@ -217,10 +238,10 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                     }}
                   >
                     <Typography color="rgb(10, 195, 10);" variant="body1">
-                      99% match
+                      {videoData?.match} match
                     </Typography>
-                    <Typography>2023</Typography>
-                    <Typography>3 seasons</Typography>
+                    <Typography>{videoData?.year}</Typography>
+                    <Typography>{videoData?.seasons} seasons</Typography>
                     <Typography
                       variant="caption"
                       sx={{
@@ -243,6 +264,23 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                       marginTop: "5px",
                     }}
                   >
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 40,
+                        left: 150,
+                        width: "300px",
+                        height: "300px",
+                      }}
+                    >
+                      {playingUrl && (
+                        <VideoPlayer
+                          url={playingUrl}
+                          isOpen={openVideoModal}
+                          onClose={closeVideoModal}
+                        />
+                      )}
+                    </Box>
                     <Typography
                       variant="caption"
                       sx={{
@@ -257,10 +295,7 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                   </Box>
                   <Box sx={{ marginTop: "20px" }}>
                     <Typography variant="body2">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Repellendus ex cumque iste sint a totam saepe tempora
-                      minus fuga, doloremque eos expedita veritatis quas
-                      corrupti sunt quam ipsam, accusamus odit?
+                      {videoData?.description}
                     </Typography>
                   </Box>
                 </Box>
@@ -274,15 +309,20 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                   }}
                 >
                   <Typography variant="caption">
-                    <span className={styles.genreColor}>Cast:</span> Henry
-                    Cavill, Freya Allan, Anya Chalotra
+                    <span className={styles.genreColor}>Cast: </span>
+                    {videoData?.cast}
                   </Typography>
                   <Typography variant="caption">
-                    <span className={styles.genreColor}>Genres:</span> Action,
-                    Adventure, Drama, Fantasy
+                    <span className={styles.genreColor}>Genres: </span>
+                    {categories.map((category, index) => (
+                      <span key={index}>
+                        {category.name}
+                        {index !== categories.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
                   </Typography>
                   <Typography variant="caption">
-                    <span className={styles.genreColor}>This show is:</span>{" "}
+                    <span className={styles.genreColor}>This show is: </span>
                     Magnificent
                   </Typography>
                 </Box>
@@ -298,12 +338,9 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                 <Typography variant="h6">Episodes</Typography>
                 <FormControl>
                   <Select
-                    labelId="season-select-label"
-                    id="season-select"
-                    name="season"
-                    defaultValue="s1"
                     value={selectedSeason}
-                    onChange={handleSeasonChange}
+                    // onChange={handleSeasonChange}
+                    onChange={onSeasonChange}
                     className={styles.select}
                     sx={{
                       color: "white",
@@ -313,10 +350,12 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                       },
                     }}
                   >
-                    <MenuItem value="s1">Season 1</MenuItem>
-                    <MenuItem value="s2">Season 2</MenuItem>
-                    <MenuItem value="s3">Season 3</MenuItem>
-                    <MenuItem value="s4">Season 4</MenuItem>
+                    {videoData &&
+                      generateSeasonsArray(videoData.seasons).map((season) => (
+                        <MenuItem key={season} value={season}>
+                          {getSeasonLabel(season)}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Box>
@@ -342,15 +381,14 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                 </Typography>
                 <Typography variant="caption">language</Typography>
               </Box>
-
-              {videos.map((video, index) => (
+              {episodesData.map((episode, index) => (
                 <>
-                  <Box className={styles.videosContainer} key={video.id}>
+                  <Box className={styles.videosContainer} key={index}>
                     <Typography>{index + 1}</Typography>
                     <Box sx={{ width: "auto", height: "auto" }}>
                       <Image
-                        src="/images/witcher-cover.webp"
-                        alt={video.attributes.title}
+                        src={episode.thumbnail}
+                        alt=""
                         width={194}
                         height={109}
                       />
@@ -369,18 +407,20 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                           display: "flex",
                           justifyContent: "space-between",
                           margin: "10px 0px 10px 10px",
-                          paddingRight: "20px",
+                          paddingRight: "10px",
                         }}
                       >
-                        <Typography>Episode {index + 1}</Typography>
-                        <Typography>2{index + 1}m</Typography>
+                        <Typography>{episode.title}</Typography>
+                        <Typography>{episode.duration}</Typography>
                       </Box>
                       <Typography
-                        sx={{ marginLeft: "10px", marginRight: "0px" }}
+                        sx={{
+                          marginLeft: "10px",
+                          marginRight: "0px",
+                          color: "rgb(190,190,190)",
+                        }}
                       >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
+                        {episode.description}
                       </Typography>
                     </Box>
                   </Box>

@@ -1,0 +1,7 @@
+.has_content {
+  min-height: auto;
+}
+
+.no_content {
+  min-height: 50px;
+}

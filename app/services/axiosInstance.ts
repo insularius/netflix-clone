@@ -1,5 +1,6 @@
 import {
   BASE_GRIFFON_URL,
+  CMS_ROOT,
   GRIFFON_CHECK_URL,
   GRIFFON_MY_CLIENT,
   GRIFFON_MY_SECRET,
@@ -18,7 +19,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     config.headers.Authorization = `Bearer ${getIdToken()}`;
-    // console.log("Making request with config: ", config.headers.Authorization);
+    console.log("Making request with config: ", config.headers.Authorization);
     return config;
   },
   (error) => {

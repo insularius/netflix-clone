@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Typography,
@@ -12,7 +13,6 @@ import {
   Fade,
 } from "@mui/material";
 import Image from "next/image";
-import { Category, VideoData } from "@/app/types/naiza";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 import styles from "./videoModal.module.css";
@@ -21,15 +21,20 @@ import VideoInfoModal from "./videoInfoModal";
 import { useDispatch, useSelector } from "react-redux";
 import { addComment, deleteComment } from "../../redux/comments/comments";
 import { AppDispatch, RootState } from "@/app/redux/store/store";
+import { Category, Episode, Show } from "@/app/types/firebase";
+import db from "@/app/lib/firebase";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 type ModalProps = {
   open: boolean;
   onClose: () => void;
   category: Category | undefined;
-  videos: VideoData[];
-  onClick: (videoUrl: string) => void;
+  videos: Show[];
   videoUrl: string | null;
   playingUrl: string | null;
   setPlayingUrl: (url: string) => void;
+  selectedVideo: Show | null;
+  localSelectedVideo: Show | null;
+  selectedShowId: number | null;
 };
 
 const VideoModal: React.FC<ModalProps> = ({
@@ -37,20 +42,83 @@ const VideoModal: React.FC<ModalProps> = ({
   category,
   onClose,
   videos,
-  onClick,
+  // onClick,
   videoUrl,
   playingUrl,
   setPlayingUrl,
+  selectedVideo,
+  localSelectedVideo,
+  selectedShowId,
 }) => {
   const [selectedGenre, setSelectedGenre] = useState("Genres");
   const [isVideoPlaying, setVideoPlaying] = useState(false);
   const [infoModal, setInfoModal] = useState(false);
-
+  const [videoModal, setVideoModal] = useState(false);
   const comments = useSelector((state: RootState) => state.comments);
   const dispatch = useDispatch<AppDispatch>();
+  const bg = localSelectedVideo?.thumbnail || "defaultThumbnail.jpg";
+  const [selectedSeason, setSelectedSeason] = useState("S1");
+  const [episodesData, setEpisodesData] = useState<Episode[]>([]);
+  const [videoData, setVideoData] = useState<Show | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchVideoData = async () => {
+      if (selectedShowId === null) return;
+
+      const videoDocRef = doc(db, "shows", `showId${selectedShowId}`);
+      const videoSnapshot = await getDoc(videoDocRef);
+
+      if (videoSnapshot.exists()) {
+        setVideoData(videoSnapshot.data() as Show);
+      }
+    };
+
+    fetchVideoData();
+  }, [selectedShowId]);
+
+  useEffect(() => {
+    const fetchCategoryData = async () => {
+      const categoriesData: Category[] = [];
+      if (videoData !== null) {
+        for (let categoryId of videoData.categoryIds) {
+          const categoriesDocRef = doc(db, "categories", categoryId);
+          const categoriesSnapshot = await getDoc(categoriesDocRef);
+          if (categoriesSnapshot.exists()) {
+            categoriesData.push(categoriesSnapshot.data() as Category);
+          }
+        }
+        setCategories(categoriesData);
+      }
+    };
+    fetchCategoryData();
+  }, [videoData]);
+
+  useEffect(() => {
+    const fetchEpisodesData = async () => {
+      const episodesCollectionRef = collection(
+        db,
+        `shows/showId${selectedShowId}/seasons/${selectedSeason}/episodes`
+      );
+      const episodesSnapshot = await getDocs(episodesCollectionRef);
+
+      const episodes: Episode[] = [];
+      episodesSnapshot.forEach((doc) => {
+        const episodeData = doc.data() as Episode;
+        episodes.push(episodeData);
+      });
+      setEpisodesData(episodes);
+    };
+
+    fetchEpisodesData();
+  }, [selectedSeason]);
+
+  const handleSeasonChange = (event: SelectChangeEvent<string>) => {
+    setSelectedSeason(event.target.value);
+  };
 
   const handleGenreChange = (event: SelectChangeEvent<string>) => {
-    setSelectedGenre(event.target.value as string);
+    setSelectedGenre(event.target.value);
   };
 
   const handleInfoClick = () => {
@@ -63,7 +131,12 @@ const VideoModal: React.FC<ModalProps> = ({
     if (videoUrl) {
       setPlayingUrl(videoUrl);
       setVideoPlaying(true);
+      setVideoModal(true);
     }
+  };
+  const handleCloseVideoModal = () => {
+    setVideoModal(false);
+    setVideoPlaying(false);
   };
 
   return (
@@ -75,7 +148,7 @@ const VideoModal: React.FC<ModalProps> = ({
               height: "90vh",
               width: "90%",
               margin: "40px auto",
-              background: `url(/images/header-image.png) no-repeat center center / cover`,
+              background: `url(${bg}) no-repeat center center / cover`,
               backgroundSize: "cover",
               overflow: "hidden",
             }}
@@ -95,7 +168,7 @@ const VideoModal: React.FC<ModalProps> = ({
             >
               {category && (
                 <Typography fontWeight={700} variant="h5">
-                  {category.attributes?.name}
+                  {category.name}
                 </Typography>
               )}
               <Select
@@ -135,9 +208,7 @@ const VideoModal: React.FC<ModalProps> = ({
               }}
             >
               <Typography variant="body2" sx={{ fontSize: "16px" }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero
-                qui ut, asperiores iste repellendus officiis quaerat nihil
-                quisquam saepe, dsadsadasdasdsa sadasdas asdasdsdsadads asdas
+                {localSelectedVideo?.description}
               </Typography>
             </Box>
             <Box
@@ -229,78 +300,13 @@ const VideoModal: React.FC<ModalProps> = ({
                 overflow: "auto",
               }}
             >
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 40,
-                  left: 70,
-                  width: "91%",
-                  height: "80%",
-                  zIndex: isVideoPlaying ? 2 : 1,
-                }}
-              >
-                {playingUrl && <VideoPlayer url={playingUrl} />}
-              </Box>
-              <Box
-                sx={{
-                  position: "absolute",
-                  width: "87%",
-                  backgroundColor: "black",
-                  color: "white",
-                  zIndex: 2,
-                  display: isVideoPlaying ? "block" : "none",
-                  maxHeight: "20vh",
-                  overflow: "auto",
-                }}
-              >
-                <Typography>Video Comments:</Typography>
-                {comments.map((comment, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography>{comment}</Typography>
-                    <Button onClick={() => dispatch(deleteComment(index))}>
-                      Delete
-                    </Button>
-                  </Box>
-                ))}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const input = e.target as typeof e.target & {
-                      0: { value: string };
-                    };
-                    dispatch(addComment(input[0].value));
-                    (e.target as HTMLFormElement).reset();
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TextField
-                      name="comment"
-                      type="text"
-                      placeholder="Add comment"
-                      required
-                      fullWidth
-                      variant="outlined"
-                      InputProps={{
-                        style: { backgroundColor: "white", color: "black" },
-                      }}
-                    />
-                    <Button type="submit">Send</Button>
-                  </Box>
-                </form>
-              </Box>
+              {playingUrl && (
+                <VideoPlayer
+                  url={playingUrl}
+                  isOpen={videoModal}
+                  onClose={handleCloseVideoModal}
+                />
+              )}
               {videos.map((video) => (
                 <Box
                   key={video.id}
@@ -331,8 +337,8 @@ const VideoModal: React.FC<ModalProps> = ({
                     }}
                   >
                     <Image
-                      src="/images/feature-4.png"
-                      alt={video.attributes.title}
+                      src={video.thumbnail}
+                      alt={video.title}
                       layout="fill"
                       objectFit="cover"
                     />
@@ -348,6 +354,9 @@ const VideoModal: React.FC<ModalProps> = ({
                         left: "0px",
                       }}
                     />
+                    <Box
+                      sx={{ position: "absolute", bottom: 30, left: 20 }}
+                    ></Box>
                   </Button>
                 </Box>
               ))}
@@ -359,12 +368,18 @@ const VideoModal: React.FC<ModalProps> = ({
         <VideoInfoModal
           open={infoModal}
           onClose={handleCloseModal}
-          videos={videos}
-          category={category}
-          onClick={onClick}
+          closeVideoModal={handleCloseVideoModal}
+          openVideoModal={videoModal}
           videoUrl={videoUrl}
           playingUrl={playingUrl}
           setPlayingUrl={setPlayingUrl}
+          selectedShowId={selectedShowId}
+          handlePlayClick={handlePlayClick}
+          videoData={videoData}
+          categories={categories}
+          episodesData={episodesData}
+          onSeasonChange={handleSeasonChange}
+          selectedSeason={selectedSeason}
         />
       )}
     </>

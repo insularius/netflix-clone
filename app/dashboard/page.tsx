@@ -1,11 +1,9 @@
-"use client";
-import React, { useReducer } from "react";
-import VideoPlayer from "../components/videoPlayer/videoPlayer";
-import ReactPlayer from "react-player";
-import VideoInfoModal from "../components/customModal/videoInfoModal";
-
 const Page = () => {
-  return <div></div>;
+  return (
+    <div>
+      <h1>Dashboard</h1>
+    </div>
+  );
 };
 
 export default Page;

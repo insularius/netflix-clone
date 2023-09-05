@@ -1,3 +1,4 @@
+// import { refreshToken } from "./authProvide";
 import {
   GRIFFON_EMAIL_VERIFY_CODE,
   GRIFFON_MY_BUCKET,
@@ -27,19 +28,16 @@ import {
 import { Button, CircularProgress, styled } from "@mui/material";
 
 export const getIdToken = (): string | null => {
+  // return "123";
   try {
     const storedTokens = localStorage.getItem(TOKEN_STORAGE_KEY);
-    if (!storedTokens) {
-      console.log("No stored tokens found");
-      return null;
-    }
-    const tokens: AuthTokens = JSON.parse(storedTokens);
+    const tokens: AuthTokens = JSON.parse(storedTokens!);
     return tokens.id_token ? tokens.id_token : null;
   } catch (e) {
     console.error(e);
     return null;
   } finally {
-    console.log(`getIdToken вызвался`);
+    console.log(`Something`);
   }
 };
 
@@ -47,6 +45,7 @@ export const refreshToken = async () => {
   const params = new URLSearchParams();
   params.append("client_id", GRIFFON_MY_CLIENT);
   params.append("client_secret", GRIFFON_MY_SECRET);
+  // const refresh_token = "123";
   const tokensString = localStorage.getItem(TOKEN_STORAGE_KEY);
   const tokens = tokensString ? JSON.parse(tokensString) : null;
   if (tokens) {
@@ -54,12 +53,41 @@ export const refreshToken = async () => {
     params.append("grant_type", "refresh_token");
     return instance.post<AuthTokens>(GRIFFON_TOKEN_URL, params).then((res) => {
       localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(res.data));
+      // store.dispatch(setTokens(res.data));
       return res.data;
     });
   } else {
     throw new Error("No tokens found in local storage");
   }
 };
+
+//   async function createProfile(data: ProfileUpdateDTO) {
+//     let url = BASE_GRIFFON_URL + GRIFFON_PROFILE_URL;
+//     const idToken = await getIdToken();
+//     return axios
+//       .post<Profile>(url, data, {
+//         headers: {
+//           Authorization: `Bearer ${idToken}`,
+//         },
+//       })
+//       .then((res) => res.data);
+//   }
+
+//   async function getProfile() {
+//     const idToken = await getIdToken();
+//     let url = BASE_GRIFFON_URL + GRIFFON_PROFILE_URL;
+//     if (idToken) {
+//       return axios
+//         .get(url, {
+//           headers: {
+//             Authorization: `Bearer ${idToken}`,
+//           },
+//         })
+//         .then((res) => res?.data);
+//     } else {
+//       throw new Error("There's no token ID");
+//     }
+//   }
 
 export const sendOtp = async (code: string, sid?: string) => {
   try {
@@ -77,7 +105,7 @@ export const sendOtp = async (code: string, sid?: string) => {
   } catch (error) {
     console.error(error);
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      // toast.error("Token expired, running refreshToken");
+      console.error("Token expired, running refreshToken");
       refreshToken();
     }
     throw error;
@@ -94,6 +122,8 @@ export const checkIfUserExists = async (username: string) => {
   } catch (error: any) {
     if (error?.response?.status === 409) {
       // toast.success("User exist");
+      console.log("User exist");
+
       return true;
     }
     throw error;
@@ -111,6 +141,7 @@ export const sendEmailVerificationCode = (email: string, password: string) => {
 const persistProfile = (profile: Profile) => {
   localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
 };
+
 export function updateProfile(data: ProfileUpdateDTO) {
   return instance.put<Profile>(GRIFFON_PROFILE_URL, data).then((res) => {
     persistProfile(res.data);
@@ -130,7 +161,8 @@ export async function sendEmailVerificationPassword(
     .then((res) => res.data);
 }
 
-const getAccessToken = (): string | null => {
+export const getAccessToken = (): string | null => {
+  // return "123";
   let tokens: AuthTokens | null = null;
   try {
     const tokenString = localStorage.getItem(TOKEN_STORAGE_KEY);
