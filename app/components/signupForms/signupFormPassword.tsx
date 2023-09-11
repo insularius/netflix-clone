@@ -105,7 +105,7 @@ const SignupFormPassword = () => {
             width: "400px",
             height: "300px",
             justifyContent: "space-between",
-            alignItems: "start",
+            alignItems: "flex-start",
           }}
         >
           <Typography variant="subtitle1">Step 1 of 3</Typography>

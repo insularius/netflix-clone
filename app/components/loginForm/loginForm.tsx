@@ -23,7 +23,10 @@ import {
 } from "@/app/redux/auth/auth";
 
 import { useRouter } from "next/navigation";
-
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Profile, RegisterResponse } from "@/app/types/griffon";
 import {
   BASE_GRIFFON_URL,
@@ -40,6 +43,9 @@ const LoginForm = () => {
   const [isUserExists, setIsUserExist] = useState<boolean>(false);
   const [isUserNotFound, setIsUserNotFound] = useState<boolean>(false);
   const [isWrongPassword, setIsWrongPassword] = useState<boolean>(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const password = useSelector((state: RootState) => state.auth.password);
@@ -65,9 +71,9 @@ const LoginForm = () => {
   }, [email, password]);
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("Password changed: ", event.target.value);
-    dispatch(setPassword(event.target.value));
-    setIsWrongPassword(false);
+    const newPassword = event.target.value;
+    dispatch(setPassword(newPassword));
+    sessionStorage.setItem("saved_password", newPassword);
   };
 
   const signinPass = async (
@@ -99,9 +105,28 @@ const LoginForm = () => {
       throw e;
     }
   };
+
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+    const newEmail = event.target.value;
+    setEmail(newEmail);
+    if (rememberMe) {
+      document.cookie = `remembered_email=${newEmail}; max-age=604800;`;
+    } else {
+      document.cookie = `remembered_email=; max-age=0;`;
+    }
     setIsUserNotFound(false);
+  };
+
+  const handleRememberMeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRememberMe(event.target.checked);
+    document.cookie = `remember_me=${event.target.checked}; max-age=604800;`;
+    if (event.target.checked) {
+      document.cookie = `remembered_email=${email}; max-age=604800;`;
+    } else {
+      document.cookie = `remembered_email=; max-age=0;`;
+    }
   };
 
   const handlePasswordSubmit = async (event: React.FormEvent) => {
@@ -117,6 +142,7 @@ const LoginForm = () => {
       dispatch(setIsAuthorized(true));
       const profileData = await dispatch(getProfile());
       dispatch(setProfile(profileData as Profile));
+
       console.log("U're logged in, have fun!");
       router.push("/videos");
     } catch (error) {
@@ -124,6 +150,26 @@ const LoginForm = () => {
       console.log("Wrong password handle password");
     }
   };
+
+  useEffect(() => {
+    const getCookie = (name: string) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts[1].split(";").shift();
+    };
+    const rememberedEmail = getCookie("remembered_email");
+    const rememberMe = getCookie("remember_me");
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+    }
+    if (rememberMe !== null) {
+      setRememberMe(rememberMe === "true");
+    }
+    const savedPassword = sessionStorage.getItem("saved_password");
+    if (savedPassword) {
+      dispatch(setPassword(savedPassword));
+    }
+  }, []);
 
   return (
     <Box
@@ -191,7 +237,7 @@ const LoginForm = () => {
                 value={email}
                 error={Boolean(emailError)}
                 helperText={emailError}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
                 autoFocus
                 sx={{
                   background: "#333",
@@ -210,7 +256,7 @@ const LoginForm = () => {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 error={Boolean(passwordError)}
                 helperText={passwordError}
@@ -222,6 +268,18 @@ const LoginForm = () => {
                   "& input": { color: "#8c8c8c" },
                 }}
                 autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={(e) => e.preventDefault()}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
                 InputLabelProps={{
                   style: {
                     color: "gray",
@@ -254,6 +312,8 @@ const LoginForm = () => {
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Checkbox
+                  checked={rememberMe}
+                  onChange={handleRememberMeChange}
                   color="primary"
                   inputProps={{ "aria-label": "remember me checkbox" }}
                   sx={{
@@ -376,3 +436,6 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+//asassaAs_1
+// sdsadasd@gmail.com
+// addds@gmail.com

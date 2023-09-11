@@ -26,14 +26,13 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Episode, Show } from "../types/firebase";
 import styles from "../admin/styles.module.css";
-import { getProfile } from "../redux/auth/auth";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../redux/store/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store/store";
+import { useRouter } from "next/navigation";
 const AdminPanel = () => {
   const [categories, setCategories] = useState<DocumentData[]>([]);
   const [newCategory, setNewCategory] = useState<string>("");
   const [newCategoryID, setNewCategoryID] = useState<string>("");
-  const [episodes, setEpisodes] = useState([]);
   const [isCategoriesExpanded, setCategoriesExpanded] = useState(false);
   const [isEpisodesExpanded, setEpisodesExpanded] = useState(false);
   const [shows, setShows] = useState<Show[]>([]);
@@ -42,9 +41,8 @@ const AdminPanel = () => {
   const [episodesData, setEpisodesData] = useState<Episode[]>([]);
   const [videoData, setVideoData] = useState<Show | null>(null);
   const [expandedSeason, setExpandedSeason] = useState<string | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
   const { role } = useSelector((state: RootState) => state.auth);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(
@@ -54,13 +52,6 @@ const AdminPanel = () => {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (role === "admin") {
-      setIsAdmin(true);
-      console.log("Admin panel: ", role);
-    }
-  }, [role]);
 
   useEffect(() => {
     const fetchShows = async () => {
@@ -190,8 +181,9 @@ const AdminPanel = () => {
     console.log(episodesData);
   }, [episodesData]);
 
-  if (!isAdmin) {
-    return <div>You do not have access to this page.</div>;
+  if (role === "user") {
+    router.push("/404");
+    return;
   }
 
   return (
@@ -289,7 +281,13 @@ const AdminPanel = () => {
                             variant="contained"
                             color="primary"
                             onClick={() => {
-                              window.location.href = `/admin/create-episode/${selectedShowId}/${selectedSeason}`;
+                              // window.location.href = `/admin/create-episode/${selectedShowId}/${selectedSeason}`;
+                              if (typeof window !== "undefined") {
+                                window.location.href = `/admin/create-episode/${selectedShowId}/${selectedSeason}`;
+                              }
+                              // router.push(
+                              //   `/admin/create-episode/${selectedShowId}/${selectedSeason}`
+                              // );
                             }}
                           >
                             Create New Episode
@@ -312,7 +310,12 @@ const AdminPanel = () => {
                                     alert(
                                       `Selected Show ID: ${selectedShowId}, Selected Season: ${selectedSeason}`
                                     );
-                                    window.location.href = `/admin/edit-episode/${selectedShowId}/${selectedSeason}/${episode.id}`;
+                                    if (typeof window !== "undefined") {
+                                      window.location.href = `/admin/edit-episode/${selectedShowId}/${selectedSeason}/${episode.id}`;
+                                    }
+                                    // router.push(
+                                    //   `/admin/edit-episode/${selectedShowId}/${selectedSeason}/${episode.id}`
+                                    // );
                                   }}
                                 >
                                   Edit

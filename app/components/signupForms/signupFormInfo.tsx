@@ -136,7 +136,7 @@ const SignupFormInfo = () => {
             width: "400px",
             height: "300px",
             justifyContent: "space-between",
-            alignItems: "start",
+            alignItems: "flex-start",
           }}
         >
           <Typography variant="subtitle1">Step 3 of 3</Typography>

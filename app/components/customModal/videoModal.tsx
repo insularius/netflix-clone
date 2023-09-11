@@ -158,7 +158,7 @@ const VideoModal: React.FC<ModalProps> = ({
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "start",
+                justifyContent: "flex-start",
                 width: "100%",
                 color: "white",
                 padding: "20px",
@@ -202,7 +202,7 @@ const VideoModal: React.FC<ModalProps> = ({
                 color: "white",
                 marginLeft: "20px",
                 display: "flex",
-                justifyContent: "start",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 marginTop: "210px",
               }}

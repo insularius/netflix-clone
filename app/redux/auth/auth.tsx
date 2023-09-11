@@ -56,10 +56,6 @@ export const signin = createAsyncThunk(
   async (username: string, thunkAPI) => {
     try {
       const data = await signinService(username);
-      // persist tokens to localstorage
-      // переписать логику токенов
-      // также требуется проверка на window
-      // вытащить авторизацию из редакса, точнее токены, они не должны храниться там
       return data;
     } catch (error) {
       let errorMessage = "Unknown error";

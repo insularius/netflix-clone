@@ -28,7 +28,6 @@ import {
 import { Button, CircularProgress, styled } from "@mui/material";
 
 export const getIdToken = (): string | null => {
-  // return "123";
   try {
     const storedTokens = localStorage.getItem(TOKEN_STORAGE_KEY);
     const tokens: AuthTokens = JSON.parse(storedTokens!);
@@ -45,7 +44,6 @@ export const refreshToken = async () => {
   const params = new URLSearchParams();
   params.append("client_id", GRIFFON_MY_CLIENT);
   params.append("client_secret", GRIFFON_MY_SECRET);
-  // const refresh_token = "123";
   const tokensString = localStorage.getItem(TOKEN_STORAGE_KEY);
   const tokens = tokensString ? JSON.parse(tokensString) : null;
   if (tokens) {
@@ -53,7 +51,6 @@ export const refreshToken = async () => {
     params.append("grant_type", "refresh_token");
     return instance.post<AuthTokens>(GRIFFON_TOKEN_URL, params).then((res) => {
       localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(res.data));
-      // store.dispatch(setTokens(res.data));
       return res.data;
     });
   } else {
@@ -162,7 +159,6 @@ export async function sendEmailVerificationPassword(
 }
 
 export const getAccessToken = (): string | null => {
-  // return "123";
   let tokens: AuthTokens | null = null;
   try {
     const tokenString = localStorage.getItem(TOKEN_STORAGE_KEY);
