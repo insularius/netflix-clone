@@ -44,7 +44,7 @@ import {
 // import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
 import instance from "../services/axiosInstance";
-import { sendOtp } from "../types/authProvide";
+import { sendOtp } from "../types/authService";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store/store";
 

@@ -9,7 +9,7 @@ import {
 } from "./../constants/constants";
 
 import axios from "axios";
-import { getIdToken, refreshToken } from "../types/authProvide";
+import { getIdToken, refreshToken } from "../types/authService";
 import { RegisterResponse } from "../types/griffon";
 
 const instance = axios.create({

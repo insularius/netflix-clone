@@ -6,6 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "start:dev": "next start",
+    "start:test": "next start",
+    "start:prod": "next start",
     "lint": "next lint"
   },
   "dependencies": {

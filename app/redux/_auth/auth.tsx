@@ -11,7 +11,7 @@ import {
   PROFILE_STORAGE_KEY,
   SIGNUP_PARAMS,
 } from "../../constants/constants";
-import { sendOtp } from "@/app/types/authProvide";
+import { sendOtp } from "@/app/types/authService";
 import axios from "axios";
 import { useEffect } from "react";
 import { signupService } from "@/app/services/signup";

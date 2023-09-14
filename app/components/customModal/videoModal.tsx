@@ -111,7 +111,7 @@ const VideoModal: React.FC<ModalProps> = ({
     };
 
     fetchEpisodesData();
-  }, [selectedSeason]);
+  }, [selectedSeason, selectedShowId]);
 
   const handleSeasonChange = (event: SelectChangeEvent<string>) => {
     setSelectedSeason(event.target.value);

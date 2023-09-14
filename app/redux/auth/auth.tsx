@@ -9,7 +9,7 @@ import {
   GRIFFON_REGISTER_URL,
   TOKEN_STORAGE_KEY,
 } from "../../constants/constants";
-import { sendOtp } from "@/app/types/authProvide";
+import { sendOtp } from "@/app/types/authService";
 import { signupService } from "@/app/services/signup";
 import { signinService } from "@/app/services/signin";
 export interface AuthState extends Profile {

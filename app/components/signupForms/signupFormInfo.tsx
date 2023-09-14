@@ -19,7 +19,7 @@ import {
   resetState,
 } from "../../redux/auth/auth";
 import { AppDispatch, RootState } from "@/app/redux/store/store";
-import { deleteAvatar, updateAvatar } from "@/app/types/authProvide";
+import { deleteAvatar, updateAvatar } from "@/app/types/authService";
 import dynamic from "next/dynamic";
 
 const Ava = dynamic(() => import("@mui/material/Avatar"), { ssr: false });

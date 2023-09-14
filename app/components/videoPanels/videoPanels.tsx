@@ -50,7 +50,7 @@ const VideoPanels: React.FC<Props> = ({
   };
 
   const filteredVideos = videos.filter((video) =>
-    video.categoryIds.includes(`categoryId${activeCategory}`)
+    video.categoryIds?.includes(`categoryId${activeCategory}`)
   );
 
   const selectedCategory = categories.find(

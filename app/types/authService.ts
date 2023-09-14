@@ -6,7 +6,7 @@ import {
   GRIFFON_PROFILE_URL,
   GRIFFON_USER_EMAIL,
   PROFILE_STORAGE_KEY,
-} from "./../constants/constants";
+} from "../constants/constants";
 import axios from "axios";
 //   import { toast } from "react-toastify";
 import {

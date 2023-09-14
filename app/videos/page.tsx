@@ -26,7 +26,7 @@ const Page = () => {
     console.log("handled");
     setActiveCategory(categoryId);
     const matchingVideo = videoData.find((video) =>
-      video.categoryIds.includes(`categoryId${categoryId}`)
+      video.categoryIds?.includes(`categoryId${categoryId}`)
     );
     if (matchingVideo) {
       setSelectedVideo(matchingVideo);

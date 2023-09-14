@@ -119,7 +119,10 @@ const AdminPanel = () => {
   };
 
   const handleDelete = (categoryId: number) => {
-    if (window.confirm("Are you sure you want to delete this category?")) {
+    if (
+      typeof window !== "undefined" &&
+      window.confirm("Are you sure you want to delete this category?")
+    ) {
       deleteCategory(categoryId)
         .then(() => {
           const updatedCategories = categories.filter(
@@ -163,7 +166,10 @@ const AdminPanel = () => {
   };
 
   const handleDeleteEpisode = (episodeId: number) => {
-    if (window.confirm("Are you sure you want to delete this episode?")) {
+    if (
+      typeof window !== "undefined" &&
+      window.confirm("Are you sure you want to delete this episode?")
+    ) {
       deleteEpisode(episodeId)
         .then(() => {
           const updatedEpisodes = episodesData.filter(
@@ -181,7 +187,7 @@ const AdminPanel = () => {
     console.log(episodesData);
   }, [episodesData]);
 
-  if (role === "user") {
+  if (role === "user" && typeof window !== "undefined") {
     router.push("/404");
     return;
   }
@@ -281,13 +287,10 @@ const AdminPanel = () => {
                             variant="contained"
                             color="primary"
                             onClick={() => {
-                              // window.location.href = `/admin/create-episode/${selectedShowId}/${selectedSeason}`;
-                              if (typeof window !== "undefined") {
-                                window.location.href = `/admin/create-episode/${selectedShowId}/${selectedSeason}`;
-                              }
-                              // router.push(
-                              //   `/admin/create-episode/${selectedShowId}/${selectedSeason}`
-                              // );
+                              typeof window !== "undefined" &&
+                                router.push(
+                                  `/admin/create-episode/${selectedShowId}/${selectedSeason}`
+                                );
                             }}
                           >
                             Create New Episode
@@ -310,12 +313,10 @@ const AdminPanel = () => {
                                     alert(
                                       `Selected Show ID: ${selectedShowId}, Selected Season: ${selectedSeason}`
                                     );
-                                    if (typeof window !== "undefined") {
-                                      window.location.href = `/admin/edit-episode/${selectedShowId}/${selectedSeason}/${episode.id}`;
-                                    }
-                                    // router.push(
-                                    //   `/admin/edit-episode/${selectedShowId}/${selectedSeason}/${episode.id}`
-                                    // );
+                                    typeof window !== "undefined" &&
+                                      router.push(
+                                        `/admin/edit-episode/${selectedShowId}/${selectedSeason}/${episode.id}`
+                                      );
                                   }}
                                 >
                                   Edit

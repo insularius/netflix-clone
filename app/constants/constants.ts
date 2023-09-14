@@ -27,6 +27,7 @@ export const GRIFFON_USER_EMAIL = "/oauth/user/email";
 export const GRIFFON_EMAIL_VERIFY_CODE = "/oauth/user/email/code";
 export const GRIFFON_RESET_PASSWORD = "/oauth/password/reset";
 export const GRIFFON_PROFILE_AVATAR = "/oauth/profile/avatar";
+
 export const SIGNUP_PARAMS = new URLSearchParams();
 SIGNUP_PARAMS.append("client_id", GRIFFON_MY_CLIENT);
 SIGNUP_PARAMS.append("client_secret", GRIFFON_MY_SECRET);

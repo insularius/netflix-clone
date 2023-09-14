@@ -103,6 +103,7 @@ const Header = () => {
           padding="10px 0px"
         >
           <Image src="/images/logo.png" alt="" width={150} height={40} />
+
           <Box>
             <FormControl
               size="small"
