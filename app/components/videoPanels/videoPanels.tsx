@@ -1,6 +1,6 @@
 import { Category } from "@/app/types/firebase";
 import { Typography, Box, Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import ReactPlayer from "react-player";
 import VideoModal from "../customModal/videoModal";
@@ -27,13 +27,6 @@ const VideoPanels: React.FC<Props> = ({
   const dispatch = useDispatch<AppDispatch>();
   const [adminCode, setAdminCodeState] = useState("");
   const router = useRouter();
-  // const filteredVideos = videos.filter((video) => video.id === activeCategory);
-
-  // const filteredVideos = videos.filter((video) =>
-  //   (video.categoryIds || []).includes(
-  //     activeCategory ? activeCategory.toString() : ""
-  //   )
-  // );
 
   const checkAdminCode = () => {
     dispatch(setAdminCode(adminCode))
