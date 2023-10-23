@@ -17,11 +17,16 @@ import { useTranslations } from "next-intl";
 import { validateEmail } from "@/app/types/authService";
 import ChevronRightIcon from "../svg/chevronRightIcon";
 import ErrorIcon from "../svg/errorSvg";
-import { SignInButton, StartButton } from "../styledComponents/header/styled";
+import {
+  SignInButton,
+  StartButton,
+  Form,
+} from "../styledComponents/header/styled";
 import { useRouter } from "next-intl/client";
 import LanguageSelector from "../languageSelector/languageSelector";
 import { useTheme } from "@/app/theme/themeContext";
 import ToggleThemeButton from "../styledComponents/header/themeSwitcher";
+import LoginIcon from "@mui/icons-material/Login";
 type Props = {
   locale: string;
 };
@@ -36,6 +41,7 @@ const Header: FC<Props> = ({ locale }) => {
   const isRedirectAllowed = useSelector(
     (state: RootState) => state.auth.isRedirectAllowed
   );
+  const isMobile = window.innerWidth <= 768;
 
   useEffect(() => {
     if (isRedirectAllowed) {
@@ -61,14 +67,21 @@ const Header: FC<Props> = ({ locale }) => {
   return (
     <>
       <Box className={styles.headerContainer}>
-        <Container maxWidth="lg">
+        <Container maxWidth={"xl"}>
           <Box
             display="flex"
             alignItems="center"
             justifyContent="space-between"
             padding="10px 0px"
           >
-            <Image src="/images/logo.png" alt="" width={150} height={40} />
+            <Image
+              className={styles.logoImg}
+              src="/images/logo.png"
+              alt=""
+              width={150}
+              height={40}
+            />
+
             <Box>
               <FormControl
                 size="small"
@@ -80,16 +93,17 @@ const Header: FC<Props> = ({ locale }) => {
               >
                 <LanguageSelector locale={locale} />
                 <SignInButton
+                  className={styles.signInButton}
                   sx={{
                     "&:hover": {
                       backgroundColor: currentTheme.palette.primary.dark,
                     },
                     backgroundColor: currentTheme.palette.primary.main,
                   }}
-                  // className={styles.signInButton}
                   href="/login"
                 >
-                  {t("header.signin")}
+                  {/* {t("header.signin")} */}
+                  {isMobile ? <LoginIcon /> : t("header.signin")}
                 </SignInButton>
                 <ToggleThemeButton />
               </FormControl>
@@ -109,6 +123,7 @@ const Header: FC<Props> = ({ locale }) => {
               {t("header.title")}
             </Typography>
             <Typography
+              className={styles.subheading}
               variant="body2"
               sx={{
                 fontSize: "1.5rem",
@@ -131,26 +146,18 @@ const Header: FC<Props> = ({ locale }) => {
             >
               {t("header.subtitle2")}
             </Typography>
-            <FormControl
-              sx={{
-                width: "600px",
-                display: "flex",
-                flexDirection: "row",
-                margin: "auto",
-                marginTop: "20px",
-              }}
-            >
+            <Form className={styles.formControl}>
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  marginRight: "10px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "row",
                 }}
               >
                 <TextField
                   sx={{
                     border: "1px solid gray",
-                    marginLeft: "20px",
                     "& label": {
                       color: "gray",
                     },
@@ -199,6 +206,7 @@ const Header: FC<Props> = ({ locale }) => {
               </Box>
               <StartButton
                 onClick={handleSubmit}
+                className={styles.getStartedButton}
                 type="submit"
                 sx={{
                   "&:hover": {
@@ -210,7 +218,7 @@ const Header: FC<Props> = ({ locale }) => {
                 {t("header.startButton")}
                 <ChevronRightIcon />
               </StartButton>
-            </FormControl>
+            </Form>
           </Box>
         </Container>
       </Box>

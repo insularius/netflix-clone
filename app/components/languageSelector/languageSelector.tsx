@@ -1,14 +1,9 @@
 import React, { FC } from "react";
-import {
-  Select,
-  MenuItem,
-  Box,
-  FormControl,
-  SelectChangeEvent,
-} from "@mui/material";
+import { Select, MenuItem, Box, FormControl } from "@mui/material";
 import { useRouter } from "next-intl/client";
 import { usePathname } from "next-intl/client";
-import styles from "./styles.module.css";
+// import styles from "./styles.module.css";
+import styles from "../header/styles.module.scss";
 import LngIcon from "../svg/lngSvg";
 type Props = {
   locale: string;
@@ -43,9 +38,19 @@ const LanguageSelector: FC<Props> = ({ locale }) => {
           },
         }}
         renderValue={(value) => (
-          <Box display="flex" alignItems="center">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "start",
+              alignItems: "center",
+            }}
+          >
             <LngIcon />
-            <Box component="span" marginLeft="5px">
+            <Box
+              component="span"
+              marginLeft="5px"
+              className={styles.languageTextLabel}
+            >
               {(languageMap as { [key: string]: string })[value]}
             </Box>
           </Box>
@@ -59,33 +64,3 @@ const LanguageSelector: FC<Props> = ({ locale }) => {
 };
 
 export default LanguageSelector;
-
-{
-  /* <Select
-                labelId="language-select-label"
-                id="language-select"
-                name="language"
-                value={locale}
-                defaultValue={locale}
-                onChange={handleChange}
-                className={styles.select}
-                sx={{
-                  color: "white",
-                  font: "inherit",
-                  "& .MuiSvgIcon-root": {
-                    fill: "white",
-                  },
-                }}
-                renderValue={(value) => (
-                  <Box display="flex" alignItems="center">
-                    <LngIcon />
-                    <Box component="span" marginLeft="5px">
-                      {(languageMap as { [key: string]: string })[value]}
-                    </Box>
-                  </Box>
-                )}
-              >
-                <MenuItem value="en">English</MenuItem>
-                <MenuItem value="kz">Qazaq</MenuItem>
-              </Select> */
-}

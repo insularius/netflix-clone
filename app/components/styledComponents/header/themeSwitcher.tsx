@@ -19,6 +19,9 @@ const ToggleButton = styled(Button)`
   &:hover {
     background-color: rgba(0, 0, 0, 0.5);
   }
+  @media (max-width: 768px) {
+    width: 60px;
+  }
 `;
 
 const IconContainer = styled("div")`
@@ -31,10 +34,16 @@ const IconContainer = styled("div")`
 
 const Sun = styled(SunIcon)`
   color: #ffcc00;
+  @media (max-width: 768px) {
+    width: 20px;
+  }
 `;
 
 const Moon = styled(MoonIcon)`
   color: white;
+  @media (max-width: 768px) {
+    width: 20px;
+  }
 `;
 
 const ToggleThemeButton = () => {

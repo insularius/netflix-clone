@@ -1,7 +1,7 @@
 // @import "../../globals.scss";
 
 .headerContainer {
-  max-width: 100%;
+  // max-width: 100%;
   height: 100vh;
   background: url("/images/header-image.png");
   background-size: cover;
@@ -11,27 +11,11 @@
   background-color: rgba(0, 0, 0, 0.7);
   background-blend-mode: overlay;
 }
-.logo {
-  width: 150px;
-  height: 40px;
-}
 
 .formControl {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.signInButton {
-  width: 76px;
-  height: 32px;
-  border: 0;
-  outline: 0;
-  background: #db0001;
-  color: #fff;
-  font-size: 12px;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 .contentContainer {
@@ -68,27 +52,14 @@
 .emailInput {
   flex: 1;
   border: 0;
-  width: 350px;
+  width: 370px;
   outline: 0;
-  /* margin-left: 20px; */
+  // /* margin-left: 20px; */
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0.5);
   border: 1px solid gray;
 }
-.getStartedButton {
-  width: 210px;
-  height: 56px;
-  border: 0;
-  outline: 0;
-  background: #db0001;
-  color: #fff;
-  font-weight: 600;
-  padding: 12px 24px;
-  font-size: 18px;
-  border-radius: 4px;
-  margin-left: 8px;
-  cursor: pointer;
-}
+
 .headerRight {
   display: flex;
   align-items: center;
@@ -106,11 +77,38 @@
 
 @media (max-width: 768px) {
   .heading {
-    font-size: 2rem;
+    font-size: 1rem;
   }
-
+  .headerContainer {
+    padding: 10px 0px;
+  }
   .subheading {
     font-size: 1rem;
-    color: red !important;
+    color: red;
+  }
+
+  .emailInput {
+    // max-width: 500px;
+  }
+
+  .getStartedButton {
+    width: 30%;
+    margin-top: 10px;
+  }
+  .logoImg {
+    width: 80px;
+    height: 30px;
+    margin-left: 0px;
+  }
+  .languageText {
+    display: none;
+  }
+  .select {
+    padding-top: 5px;
+    width: 65px;
+    height: 32px;
+  }
+  .languageTextLabel {
+    display: none;
   }
 }

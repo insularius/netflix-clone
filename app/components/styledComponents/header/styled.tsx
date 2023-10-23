@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { Button } from "@mui/material";
+import { Button, FormControl } from "@mui/material";
 
 export const StartButton = styled(Button)`
   width: 210px;
@@ -25,4 +25,25 @@ export const SignInButton = styled(Button)`
   font-size: 12px;
   border-radius: 4px;
   cursor: pointer;
+  &:hover: {
+    backgroundcolor: currentTheme.palette.primary.dark;
+  }
+  ,
+  backgroundColor: currentTheme.palette.primary.main,
+  @media (max-width: 768px) {
+    background: red;
+    width: 20px;
+  }
+`;
+export const Form = styled(FormControl)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  // margin: auto;
+  margin-top: 20px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
