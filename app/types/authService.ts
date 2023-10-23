@@ -58,34 +58,6 @@ export const refreshToken = async () => {
   }
 };
 
-//   async function createProfile(data: ProfileUpdateDTO) {
-//     let url = BASE_GRIFFON_URL + GRIFFON_PROFILE_URL;
-//     const idToken = await getIdToken();
-//     return axios
-//       .post<Profile>(url, data, {
-//         headers: {
-//           Authorization: `Bearer ${idToken}`,
-//         },
-//       })
-//       .then((res) => res.data);
-//   }
-
-//   async function getProfile() {
-//     const idToken = await getIdToken();
-//     let url = BASE_GRIFFON_URL + GRIFFON_PROFILE_URL;
-//     if (idToken) {
-//       return axios
-//         .get(url, {
-//           headers: {
-//             Authorization: `Bearer ${idToken}`,
-//           },
-//         })
-//         .then((res) => res?.data);
-//     } else {
-//       throw new Error("There's no token ID");
-//     }
-//   }
-
 export const sendOtp = async (code: string, sid?: string) => {
   try {
     await instance.post<SendOtpResponse>(

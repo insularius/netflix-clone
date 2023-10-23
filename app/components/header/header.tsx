@@ -1,45 +1,38 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, FC } from "react";
 import {
   Box,
   Container,
   FormControl,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
-
 import Image from "next/image";
-import styles from "../header/styles.module.css";
+import styles from "../header/styles.module.scss";
 import { useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "../../redux/store/store";
 import { resetRedirect, signup } from "../../redux/_auth/auth";
-import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
-import "../../../i18n";
+import { useTranslations } from "next-intl";
 import { validateEmail } from "@/app/types/authService";
 import ChevronRightIcon from "../svg/chevronRightIcon";
 import ErrorIcon from "../svg/errorSvg";
 import { SignInButton, StartButton } from "../styledComponents/header/styled";
-import LngIcon from "../svg/lngSvg";
+import { useRouter } from "next-intl/client";
+import LanguageSelector from "../languageSelector/languageSelector";
+import { useTheme } from "@/app/theme/themeContext";
+import ToggleThemeButton from "../styledComponents/header/themeSwitcher";
+type Props = {
+  locale: string;
+};
 
-const Header = () => {
+const Header: FC<Props> = ({ locale }) => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
-  const languageMap = {
-    en: "English",
-    kz: "Qazaq",
-  };
   const dispatch = useDispatch<AppDispatch>();
+  const t = useTranslations();
   const router = useRouter();
-  const { t, i18n } = useTranslation();
-
-  const changeLanguage = (lng: any) => {
-    i18n.changeLanguage(lng);
-  };
-
+  const { currentTheme } = useTheme();
   const isRedirectAllowed = useSelector(
     (state: RootState) => state.auth.isRedirectAllowed
   );
@@ -66,183 +59,162 @@ const Header = () => {
   };
 
   return (
-    <Box className={styles.headerContainer}>
-      <Container maxWidth="lg">
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          padding="10px 0px"
-        >
-          <Image src="/images/logo.png" alt="" width={150} height={40} />
-
-          <Box>
-            <FormControl
-              size="small"
-              sx={{ display: "flex", flexDirection: "row" }}
-            >
-              <Select
-                labelId="language-select-label"
-                id="language-select"
-                name="language"
-                defaultValue="en"
-                className={styles.select}
+    <>
+      <Box className={styles.headerContainer}>
+        <Container maxWidth="lg">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            padding="10px 0px"
+          >
+            <Image src="/images/logo.png" alt="" width={150} height={40} />
+            <Box>
+              <FormControl
+                size="small"
                 sx={{
-                  color: "white",
-                  font: "inherit",
-                  "& .MuiSvgIcon-root": {
-                    fill: "white",
-                  },
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
-                renderValue={(value) => (
-                  <Box display="flex" alignItems="center">
-                    <LngIcon />
-                    <Box component="span" marginLeft="5px">
-                      {(languageMap as { [key: string]: string })[value]}
-                    </Box>
-                  </Box>
-                )}
               >
-                <MenuItem value="en" onClick={() => changeLanguage("en")}>
-                  English
-                </MenuItem>
-                <MenuItem value="kz" onClick={() => changeLanguage("kz")}>
-                  Qazaq
-                </MenuItem>
-              </Select>
-              <SignInButton
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "#b20303",
-                  },
-                }}
-                className={styles.signInButton}
-                href="/login"
-              >
-                Sign In
-              </SignInButton>
-            </FormControl>
+                <LanguageSelector locale={locale} />
+                <SignInButton
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: currentTheme.palette.primary.dark,
+                    },
+                    backgroundColor: currentTheme.palette.primary.main,
+                  }}
+                  // className={styles.signInButton}
+                  href="/login"
+                >
+                  {t("header.signin")}
+                </SignInButton>
+                <ToggleThemeButton />
+              </FormControl>
+            </Box>
           </Box>
-        </Box>
-        <Box className={styles.contentContainer}>
-          <Typography
-            variant="h1"
-            // className={styles.heading}
-            sx={{
-              margin: "0",
-              fontSize: "3rem",
-              fontWeight: 700,
-              maxWidth: "100%",
-              color: "white",
-            }}
-          >
-            {t("unlimited_movies")}
-          </Typography>
-          <Typography
-            variant="body2"
-            // className={styles.subheading}
-            sx={{
-              fontSize: "1.5rem",
-              fontWeight: 400,
-              color: "white",
-              marginTop: "16px",
-            }}
-          >
-            {t("watch_anywhere")}
-          </Typography>
-          <Typography
-            variant="h3"
-            sx={{
-              fontSize: "1.5rem",
-              fontWeight: 400,
-              color: "white",
-              marginTop: "16px",
-            }}
-            className={styles.subheading}
-          >
-            Ready to watch? Enter your email to create or restart your
-            membership.
-          </Typography>
-          <FormControl
-            sx={{
-              width: "600px",
-              display: "flex",
-              flexDirection: "row",
-              margin: "auto",
-              marginTop: "20px",
-            }}
-          >
-            <Box
+          <Box className={styles.contentContainer}>
+            <Typography
+              variant="h1"
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                marginRight: "10px",
+                margin: "0",
+                fontSize: "3rem",
+                fontWeight: 700,
+                maxWidth: "100%",
+                color: "white",
               }}
             >
-              <TextField
-                sx={{ border: "1px solid gray", marginLeft: "20px" }}
-                className={styles.emailInput}
-                label="Email address"
-                name="email"
-                type="email"
-                id="filled-basic"
-                variant="filled"
-                InputLabelProps={{
-                  style: {
-                    color: "gray",
-                  },
-                }}
-                inputProps={{
-                  style: {
-                    color: "white",
-                  },
-                }}
-                value={email}
-                error={emailError}
-                onChange={handleEmailChange}
-              />
+              {t("header.title")}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: "1.5rem",
+                fontWeight: 400,
+                color: "white",
+                marginTop: "16px",
+              }}
+            >
+              {t("header.subtitle1")}
+            </Typography>
+            <Typography
+              variant="h3"
+              sx={{
+                fontSize: "1.5rem",
+                fontWeight: 400,
+                color: "white",
+                marginTop: "16px",
+              }}
+              className={styles.subheading}
+            >
+              {t("header.subtitle2")}
+            </Typography>
+            <FormControl
+              sx={{
+                width: "600px",
+                display: "flex",
+                flexDirection: "row",
+                margin: "auto",
+                marginTop: "20px",
+              }}
+            >
               <Box
                 sx={{
-                  minHeight: "30px",
-                  color: "red",
                   display: "flex",
-                  justifyContent: "flex-start",
+                  flexDirection: "column",
+                  marginRight: "10px",
                 }}
               >
-                {emailError && (
-                  <Box
-                    sx={{
-                      minHeight: "20px",
-                      color: "red",
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "20px",
-                    }}
-                  >
-                    <ErrorIcon />
-                    <Box component="span" marginLeft="5px">
-                      Email is required.
+                <TextField
+                  sx={{
+                    border: "1px solid gray",
+                    marginLeft: "20px",
+                    "& label": {
+                      color: "gray",
+                    },
+                    "& input": { color: currentTheme.palette.text.secondary },
+                  }}
+                  className={styles.emailInput}
+                  label={t("header.email")}
+                  name="email"
+                  type="email"
+                  id="filled-basic"
+                  variant="filled"
+                  InputLabelProps={{
+                    style: {
+                      color: "gray",
+                    },
+                  }}
+                  value={email}
+                  error={emailError}
+                  onChange={handleEmailChange}
+                />
+                <Box
+                  sx={{
+                    minHeight: "30px",
+                    color: "red",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  {emailError && (
+                    <Box
+                      sx={{
+                        minHeight: "20px",
+                        color: "red",
+                        display: "flex",
+                        alignItems: "center",
+                        marginLeft: "20px",
+                      }}
+                    >
+                      <ErrorIcon />
+                      <Box component="span" marginLeft="5px">
+                        Email is required.
+                      </Box>
                     </Box>
-                  </Box>
-                )}
+                  )}
+                </Box>
               </Box>
-            </Box>
-            <StartButton
-              onClick={handleSubmit}
-              type="submit"
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#b20303",
-                },
-              }}
-            >
-              Get Started
-              <ChevronRightIcon />
-            </StartButton>
-          </FormControl>
-        </Box>
-      </Container>
-    </Box>
+              <StartButton
+                onClick={handleSubmit}
+                type="submit"
+                sx={{
+                  "&:hover": {
+                    backgroundColor: currentTheme.palette.primary.dark,
+                  },
+                  backgroundColor: currentTheme.palette.primary.main,
+                }}
+              >
+                {t("header.startButton")}
+                <ChevronRightIcon />
+              </StartButton>
+            </FormControl>
+          </Box>
+        </Container>
+      </Box>
+    </>
   );
 };
 

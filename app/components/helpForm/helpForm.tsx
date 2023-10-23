@@ -14,13 +14,14 @@ import {
   FormControlLabel,
   Select,
   MenuItem,
-  InputAdornment,
 } from "@mui/material";
 import Image from "next/image";
 import Flag from "react-flagkit";
+import { useTranslations } from "next-intl";
 const HelpForm = () => {
   const [resetMethod, setResetMethod] = useState("email");
   const [selectedCountryCode, setSelectedCountryCode] = useState("+7");
+  const t = useTranslations();
   return (
     <Box
       sx={{
@@ -71,7 +72,6 @@ const HelpForm = () => {
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center",
           marginTop: "40px",
           flexGrow: 1,
         }}
@@ -87,10 +87,9 @@ const HelpForm = () => {
           }}
         >
           <Paper elevation={3} sx={{ p: 4, background: "#f3f3f3" }}>
-            {/* Здесь ваша форма */}
-            <Typography variant="h4">Forgot Email/Password</Typography>
+            <Typography variant="h4">{t("help.title")}</Typography>
             <Typography variant="body1" mb={1} sx={{ marginTop: "20px" }}>
-              How would you like to reset your password?
+              {t("help.subtitle")}
             </Typography>
             <RadioGroup
               name="resetMethod"
@@ -101,34 +100,32 @@ const HelpForm = () => {
               <FormControlLabel
                 value="email"
                 control={<Radio />}
-                label="Email address"
+                label={t("help.resetOptions.email")}
               />
               <FormControlLabel
                 value="sms"
                 control={<Radio />}
-                label="Text message (SMS)"
+                label={t("help.resetOptions.sms")}
               />
             </RadioGroup>
             {resetMethod === "email" && (
               <>
                 <Typography variant="body1" mb={1}>
-                  We will send you an email with instructions on how to reset
-                  your password.
+                  {t("help.emailInstruction")}
                 </Typography>
                 <TextField
                   variant="outlined"
                   fullWidth
-                  label="name@example.com"
+                  label={t("help.exampleEmail")}
                   type="text"
-                  placeholder="Enter your email"
+                  placeholder={t("help.enterEmailLabel")}
                 />
               </>
             )}
             {resetMethod === "sms" && (
               <>
                 <Typography variant="body1" mb={1}>
-                  We will text you a verification code to reset your password.
-                  Message and data rates may apply.
+                  {t("help.smsInstruction")}
                 </Typography>
                 <Box
                   sx={{
@@ -168,9 +165,9 @@ const HelpForm = () => {
                   <TextField
                     variant="outlined"
                     fullWidth
-                    label="Phone number"
+                    label={t("help.phonePlaceholder")}
                     type="text"
-                    placeholder="Enter your phone number"
+                    placeholder={t("help.enterPhoneLabel")}
                     sx={{
                       flex: 1,
                     }}
@@ -184,7 +181,9 @@ const HelpForm = () => {
                 fullWidth
                 sx={{ width: "100%", marginTop: "30px", marginBottom: "20px" }}
               >
-                {resetMethod === "email" ? "Email Me" : "Text Me"}
+                {resetMethod === "email"
+                  ? t(`help.resetMethod.email`)
+                  : t(`help.resetMethod.text`)}
               </Button>
               <Link
                 href="#"
@@ -193,7 +192,7 @@ const HelpForm = () => {
                 underline="none"
                 sx={{ fontSize: "16px" }}
               >
-                I dont&apos;t remember my phone or email.
+                {t("help.forgotDetails")}
               </Link>
             </Box>
           </Paper>

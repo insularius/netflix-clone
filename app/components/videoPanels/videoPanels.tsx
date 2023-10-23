@@ -1,15 +1,12 @@
 import { Category } from "@/app/types/firebase";
 import { Typography, Box, Button, TextField } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import ReactPlayer from "react-player";
 import VideoModal from "../customModal/videoModal";
-import VideoPlayer from "../videoPlayer/videoPlayer";
 import { Show } from "@/app/types/firebase";
 import { useDispatch } from "react-redux";
 import { setAdminCode } from "@/app/redux/auth/auth";
 import { AppDispatch } from "@/app/redux/store/store";
-import { Router } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 type Props = {
   videos: Show[];
@@ -147,20 +144,20 @@ const VideoPanels: React.FC<Props> = ({
       )}
       <Box>
         <TextField
-          label="Enter Admin Code"
+          label="Введи цифру 1"
           variant="outlined"
           value={adminCode}
           onChange={(e) => setAdminCodeState(e.target.value)}
           sx={{
             background: "#333",
-            width: " 10%",
+            width: "10%",
             display: "flex",
             flexDirection: "column",
             "& label": { color: "#8c8c8c" },
             "& input": { color: "#8c8c8c" },
           }}
         />
-        <Button onClick={checkAdminCode}>Check Admin Code</Button>
+        <Button onClick={checkAdminCode}>Клац</Button>
       </Box>
     </Box>
   );

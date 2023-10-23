@@ -10,7 +10,7 @@ import {
   Typography,
   Fade,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Button } from "@mui/material";
@@ -193,7 +193,6 @@ const VideoInfoModal: React.FC<ModalProps> = ({
                   <IconButton
                     onClick={onClose}
                     size="small"
-                    className={styles.closeIcon}
                     sx={{
                       backgroundColor: "rgba(0, 0, 0, 0.5)",
                       color: "white",

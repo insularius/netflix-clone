@@ -1,0 +1,41 @@
+{
+  "header": {
+    "title": "Unlimited movies, TV shows, and more",
+    "subtitle1": "Watch anywhere. Cancel anytime.",
+    "subtitle2": "Ready to watch? Enter your email to create or restart your membership.",
+    "email": "Email address",
+    "startButton": "Get started",
+    "signin": "Sign in"
+  },
+  "help": {
+    "title": "Forgot Email/Password",
+    "subtitle": "How would you like to reset your password?",
+    "resetOptions": {
+      "email": "Email address",
+      "sms": "Text message (SMS)"
+    },
+    "emailInstruction": "We will send you an email with instructions on how to reset your password.",
+    "smsInstruction": "We will text you a verification code to reset your password. Message and data rates may apply.",
+    "emailPlaceholder": "name@example.com",
+    "phonePlaceholder": "Phone number",
+    "enterEmailLabel": "Enter your email",
+    "enterPhoneLabel": "Enter your phone number",
+    "exampleEmail": "name@example.com",
+    "forgotDetails": "I don't remember my phone or email.",
+    "resetMethod": {
+      "email": "Email me",
+      "text": "Text me"
+    }
+  },
+  "login": {
+    "signIn": "Sign in",
+    "emailOrPhone": "Email or phone number",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "needHelp": "Need help?",
+    "newToService": "New to Netflix?",
+    "signUpNow": "Sign up now",
+    "recaptchaNotice": "This page is protected by Google reCAPTCHA to ensure you're not a bot.",
+    "learnMore": "Learn more"
+  }
+}

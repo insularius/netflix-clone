@@ -1,4 +1,11 @@
-import { AppBar, Toolbar, IconButton, Typography, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Box,
+  Link,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/NotificationsOutlined";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -22,7 +29,9 @@ const VideosNavbar: React.FC<Props> = ({ categories, onCategoryClick }) => {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Image src="/images/logo.png" alt="logo" width={150} height={40} />
+          <Link href="/">
+            <Image src="/images/logo.png" alt="logo" width={150} height={40} />
+          </Link>
           <Box marginLeft={4} display="flex" alignItems="center">
             {categories.map((category) => (
               <Typography

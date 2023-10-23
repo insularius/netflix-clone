@@ -1,5 +1,6 @@
 import { styled } from "@mui/system";
 import { Button } from "@mui/material";
+
 export const StartButton = styled(Button)`
   width: 210px;
   height: 56px;

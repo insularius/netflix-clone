@@ -1,0 +1,11 @@
+.container {
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  width: 100%;
+  display: flex;
+}
+.slide {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+}
