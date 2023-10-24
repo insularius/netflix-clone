@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { Button, FormControl } from "@mui/material";
+import { Button, FormControl, Typography } from "@mui/material";
 
 export const StartButton = styled(Button)`
   width: 210px;
@@ -14,6 +14,9 @@ export const StartButton = styled(Button)`
   border-radius: 4px;
   margin-left: 8px;
   cursor: pointer;
+  @media (max-width: 768px) {
+    width: 62%;
+  }
 `;
 export const SignInButton = styled(Button)`
   width: 76px;
@@ -25,11 +28,7 @@ export const SignInButton = styled(Button)`
   font-size: 12px;
   border-radius: 4px;
   cursor: pointer;
-  &:hover: {
-    backgroundcolor: currentTheme.palette.primary.dark;
-  }
   ,
-  backgroundColor: currentTheme.palette.primary.main,
   @media (max-width: 768px) {
     background: red;
     width: 20px;
@@ -39,11 +38,32 @@ export const Form = styled(FormControl)`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  gap: 10px;
   align-items: center;
-  // margin: auto;
-  margin-top: 20px;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
+  }
+`;
+
+export const Subtitle = styled(Typography)<{ isDark?: boolean }>`
+  variant: h3;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: white;
+  margin-top: 16px;
+  color: ${(props) => (props.isDark ? "#0080ff" : "#fff")};
+  ${(props) => props.theme.breakpoints.down("sm")} {
+    font-size: 1.1rem;
+  }
+`;
+export const HeaderTitle = styled(Typography)<{ isDark?: boolean }>`
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+  max-width: 100%;
+  color: white;
+  ${(props) => props.theme.breakpoints.down("sm")} {
+    font-size: 2rem;
   }
 `;

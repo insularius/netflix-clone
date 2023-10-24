@@ -21,6 +21,8 @@ import {
   SignInButton,
   StartButton,
   Form,
+  Subtitle,
+  HeaderTitle,
 } from "../styledComponents/header/styled";
 import { useRouter } from "next-intl/client";
 import LanguageSelector from "../languageSelector/languageSelector";
@@ -37,7 +39,7 @@ const Header: FC<Props> = ({ locale }) => {
   const dispatch = useDispatch<AppDispatch>();
   const t = useTranslations();
   const router = useRouter();
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDark } = useTheme();
   const isRedirectAllowed = useSelector(
     (state: RootState) => state.auth.isRedirectAllowed
   );
@@ -93,7 +95,6 @@ const Header: FC<Props> = ({ locale }) => {
               >
                 <LanguageSelector locale={locale} />
                 <SignInButton
-                  className={styles.signInButton}
                   sx={{
                     "&:hover": {
                       backgroundColor: currentTheme.palette.primary.dark,
@@ -102,7 +103,6 @@ const Header: FC<Props> = ({ locale }) => {
                   }}
                   href="/login"
                 >
-                  {/* {t("header.signin")} */}
                   {isMobile ? <LoginIcon /> : t("header.signin")}
                 </SignInButton>
                 <ToggleThemeButton />
@@ -110,49 +110,17 @@ const Header: FC<Props> = ({ locale }) => {
             </Box>
           </Box>
           <Box className={styles.contentContainer}>
-            <Typography
-              variant="h1"
-              sx={{
-                margin: "0",
-                fontSize: "3rem",
-                fontWeight: 700,
-                maxWidth: "100%",
-                color: "white",
-              }}
-            >
-              {t("header.title")}
-            </Typography>
-            <Typography
-              className={styles.subheading}
-              variant="body2"
-              sx={{
-                fontSize: "1.5rem",
-                fontWeight: 400,
-                color: "white",
-                marginTop: "16px",
-              }}
-            >
-              {t("header.subtitle1")}
-            </Typography>
-            <Typography
-              variant="h3"
-              sx={{
-                fontSize: "1.5rem",
-                fontWeight: 400,
-                color: "white",
-                marginTop: "16px",
-              }}
-              className={styles.subheading}
-            >
-              {t("header.subtitle2")}
-            </Typography>
-            <Form className={styles.formControl}>
+            <HeaderTitle>{t("header.title")}</HeaderTitle>
+            <Subtitle isDark={isDark}>{t("header.subtitle1")}</Subtitle>
+            <Subtitle isDark={isDark}>{t("header.subtitle2")}</Subtitle>
+            <Form>
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  flexDirection: "column", //row
+                  marginTop: "30px",
                 }}
               >
                 <TextField
@@ -193,7 +161,6 @@ const Header: FC<Props> = ({ locale }) => {
                         color: "red",
                         display: "flex",
                         alignItems: "center",
-                        marginLeft: "20px",
                       }}
                     >
                       <ErrorIcon />
@@ -227,3 +194,10 @@ const Header: FC<Props> = ({ locale }) => {
 };
 
 export default Header;
+
+// ${(props) =>
+//   props.theme.breakpoints.down("sm") &&
+//   `
+//  font-size: 1.1rem;
+//  color: white;
+// `}
