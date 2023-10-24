@@ -34,6 +34,7 @@ export const SignInButton = styled(Button)`
     width: 20px;
   }
 `;
+
 export const Form = styled(FormControl)`
   display: flex;
   flex-direction: row;
@@ -53,17 +54,18 @@ export const Subtitle = styled(Typography)<{ isDark?: boolean }>`
   color: white;
   margin-top: 16px;
   color: ${(props) => (props.isDark ? "#0080ff" : "#fff")};
-  ${(props) => props.theme.breakpoints.down("sm")} {
+  ${(props) => props.theme.breakpoints.down("tablet")} {
     font-size: 1.1rem;
   }
 `;
+
 export const HeaderTitle = styled(Typography)<{ isDark?: boolean }>`
   margin: 0;
   font-size: 3rem;
   font-weight: 700;
   max-width: 100%;
   color: white;
-  ${(props) => props.theme.breakpoints.down("sm")} {
+  ${(props) => props.theme.breakpoints.down("tablet")} {
     font-size: 2rem;
   }
 `;

@@ -1,15 +1,26 @@
 "use client";
 
 import { createTheme } from "@mui/material";
-
+declare module "@mui/material/styles" {
+  interface BreakpointOverrides {
+    xs: false;
+    sm: false;
+    md: false;
+    lg: false;
+    xl: false;
+    mobile: true;
+    tablet: true;
+    laptop: true;
+    desktop: true;
+  }
+}
 export const theme = createTheme({
   breakpoints: {
     values: {
-      xs: 0, // mobile
-      sm: 600, // tablet
-      md: 900, // laptop
-      lg: 1200, // desktop
-      xl: 1536, // larger desktop
+      mobile: 0,
+      tablet: 768,
+      laptop: 900,
+      desktop: 1200,
     },
   },
 });

@@ -69,7 +69,7 @@ const Header: FC<Props> = ({ locale }) => {
   return (
     <>
       <Box className={styles.headerContainer}>
-        <Container maxWidth={"xl"}>
+        <Container maxWidth={"desktop"}>
           <Box
             display="flex"
             alignItems="center"

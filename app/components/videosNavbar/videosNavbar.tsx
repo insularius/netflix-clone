@@ -13,7 +13,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import React from "react";
 import { Category } from "@/app/types/firebase";
 import Image from "next/image";
-
+import styles from "../videosNavbar/styles.module.scss";
 type Props = {
   categories: Category[];
   onCategoryClick: (categoryId: number) => void;
@@ -23,6 +23,7 @@ const VideosNavbar: React.FC<Props> = ({ categories, onCategoryClick }) => {
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar
+        className={styles.toolbar}
         sx={{
           justifyContent: "space-between",
           margin: "10px 16px",
@@ -30,11 +31,23 @@ const VideosNavbar: React.FC<Props> = ({ categories, onCategoryClick }) => {
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Link href="/">
-            <Image src="/images/logo.png" alt="logo" width={150} height={40} />
+            <Image
+              className={styles.logoImg}
+              src="/images/logo.png"
+              alt="logo"
+              width={150}
+              height={40}
+            />
           </Link>
-          <Box marginLeft={4} display="flex" alignItems="center">
+          <Box
+            className={styles.container}
+            marginLeft={4}
+            display="flex"
+            alignItems="center"
+          >
             {categories.map((category) => (
               <Typography
+                className={styles.categorys}
                 variant="h6"
                 component="div"
                 key={category.id}
@@ -53,14 +66,14 @@ const VideosNavbar: React.FC<Props> = ({ categories, onCategoryClick }) => {
         </Box>
         <Box display="flex" alignItems="center">
           <IconButton sx={{ color: "white" }}>
-            <SearchIcon />
+            <SearchIcon className={styles.searchIcon} />
           </IconButton>
           <IconButton sx={{ color: "white" }}>
-            <NotificationsIcon />
+            <NotificationsIcon className={styles.notificationIcon} />
           </IconButton>
           <IconButton sx={{ color: "white" }}>
-            <AccountBoxIcon fontSize="large" />
-            <ArrowDropDownIcon />
+            <AccountBoxIcon className={styles.accountIcon} fontSize="medium" />
+            <ArrowDropDownIcon className={styles.arrowIcon} />
           </IconButton>
         </Box>
       </Toolbar>

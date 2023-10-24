@@ -348,7 +348,7 @@ const VideoModal: React.FC<ModalProps> = ({
                       width={30}
                       height={30}
                       style={{
-                        zIndex: "1",
+                        zIndex: "4",
                         position: "absolute",
                         top: "10px",
                         left: "0px",

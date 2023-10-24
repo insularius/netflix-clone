@@ -1,0 +1,40 @@
+@import "../../variables.scss";
+
+.logoImg {
+  @include tablet {
+    width: 50px;
+    height: 20px;
+  }
+}
+.categorys {
+  @include tablet {
+    font-size: 12px;
+    margin-left: 10px;
+  }
+}
+.toolbar {
+  @include tablet {
+    margin: 0px;
+    padding: 0px 10px;
+  }
+}
+.container {
+  @include tablet {
+    margin-left: 0px;
+  }
+}
+.searchIcon {
+  @include tablet {
+    width: 20px;
+  }
+}
+.notificationIcon {
+  @include tablet {
+    width: 20px;
+  }
+}
+.accountIcon {
+  @include tablet {
+    width: 20px;
+  }
+}

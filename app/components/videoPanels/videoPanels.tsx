@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { setAdminCode } from "@/app/redux/auth/auth";
 import { AppDispatch } from "@/app/redux/store/store";
 import { useRouter } from "next/navigation";
+import styles from "../videoPanels/styles.module.scss";
 type Props = {
   videos: Show[];
   categories: Category[];
@@ -95,6 +96,7 @@ const VideoPanels: React.FC<Props> = ({
       >
         {filteredVideos.map((video, index) => (
           <Box
+            className={styles.videoWrapper}
             sx={{
               flex: "0 0 auto",
               width: "300px",
@@ -142,7 +144,7 @@ const VideoPanels: React.FC<Props> = ({
           selectedShowId={selectedShowId}
         />
       )}
-      <Box>
+      {/* <Box>
         <TextField
           label="Введи цифру 1"
           variant="outlined"
@@ -158,7 +160,7 @@ const VideoPanels: React.FC<Props> = ({
           }}
         />
         <Button onClick={checkAdminCode}>Клац</Button>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

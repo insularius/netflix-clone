@@ -1,0 +1,10 @@
+@import "../../variables";
+
+.videoWrapper {
+  @include tablet {
+    width: 200px;
+    height: 130px;
+    border: 1px solid gray;
+    background-position: center;
+  }
+}

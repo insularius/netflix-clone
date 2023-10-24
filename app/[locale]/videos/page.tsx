@@ -1,5 +1,5 @@
 "use client";
-import { Box } from "@mui/system";
+import { Box, Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import VideoPanels from "../../components/videoPanels/videoPanels";
 import VideosNavbar from "../../components/videosNavbar/videosNavbar";
@@ -57,6 +57,7 @@ const Page = () => {
         categories={categories}
         onCategoryClick={handleCategoryClick}
       />
+
       <VideoPanels
         categories={categories}
         videos={videoData}

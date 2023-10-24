@@ -1,9 +1,8 @@
 // @import "../../globals.scss";
-
+@import "..//../_variables.scss";
 .headerContainer {
-  // max-width: 100%;
   height: 100vh;
-  background: url("/images/header-image.png"); //header-image.png
+  background: url("/images/header-image.png");
   background-size: cover;
   background-position: center;
   padding: 10px 8%;
@@ -11,23 +10,34 @@
   background-color: rgba(0, 0, 0, 0.7);
   background-blend-mode: overlay;
   box-sizing: border-box;
+  @include tablet {
+    padding: 10px 0px;
+    height: 70vh;
+  }
 }
-
 .formControl {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-top: 0px;
 }
-
+.logoImg {
+  @include tablet {
+    width: 90px;
+    height: 30px;
+    margin-left: 0px;
+  }
+}
 .contentContainer {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  // width: 1000px;
   width: 100%;
+  @include tablet {
+    width: 80%;
+  }
 }
 .heading {
   margin: 0;
@@ -35,12 +45,18 @@
   font-weight: 700;
   max-width: 100%;
   color: red;
+  @include tablet {
+    font-size: 1rem;
+  }
 }
 .subheading {
   font-size: 1.5rem;
   font-weight: 400;
   color: white;
   margin-top: 16px;
+  @include tablet {
+    font-size: 1rem;
+  }
 }
 .formContainer {
   background: #fff;
@@ -56,10 +72,12 @@
   border: 0;
   width: 370px;
   outline: 0;
-  // /* margin-left: 20px; */
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0.5);
   border: 1px solid gray;
+  @include tablet {
+    width: 340px;
+  }
 }
 
 .headerRight {
@@ -75,47 +93,57 @@
   cursor: pointer;
   margin-right: 10px;
   background-color: rgba(0, 0, 0, 0.3);
-}
-
-@media (max-width: 768px) {
-  .heading {
-    font-size: 1rem;
-  }
-  .headerContainer {
-    padding: 10px 0px;
-  }
-  .subheading {
-    font-size: 1rem;
-    color: red;
-  }
-
-  .getStartedButton {
-    width: 30%;
-    margin-top: 10px;
-  }
-  .logoImg {
-    width: 90px;
-    height: 30px;
-    margin-left: 0px;
-  }
-  .languageText {
-    display: none;
-  }
-  .select {
+  @include tablet {
     padding-top: 5px;
     width: 65px;
     height: 32px;
   }
-  .languageTextLabel {
+}
+.languageText {
+  @include tablet {
     display: none;
   }
-  .emailInput {
-    width: 340px;
+}
+.languageTextLabel {
+  @include tablet {
+    display: none;
   }
-  .contentContainer {
-    width: 80%;
-  }
-  .headerContainer {
-    height: 70vh;
-  }
+}
+
+@media (max-width: 768px) {
+  // .heading {
+  //   font-size: 1rem;
+  // }
+  // .headerContainer {
+  //   padding: 10px 0px;
+  // }
+  // .subheading {
+  //   font-size: 1rem;
+  // }
+
+  // .logoImg {
+  //   width: 90px;
+  //   height: 30px;
+  //   margin-left: 0px;
+  // }
+  // .languageText {
+  //   display: none;
+  // }
+  // .select {
+  //   padding-top: 5px;
+  //   width: 65px;
+  //   height: 32px;
+  // }
+  // .languageTextLabel {
+  //   display: none;
+  // }
+  // .emailInput {
+  //   width: 340px;
+  // }
+  // .contentContainer {
+  //   width: 80%;
+  // }
+  // .headerContainer {
+  //   height: 70vh;
+  // }
 }
