@@ -106,7 +106,7 @@ const SignupFormProfile = () => {
       </AppBar>
       <Container
         component="main"
-        maxWidth="xs"
+        maxWidth="mobile"
         sx={{
           display: "flex",
           flexDirection: "column",
