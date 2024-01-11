@@ -15,3 +15,6 @@ https://netflix-delta-ten.vercel.app/en
 ![Screenshot 1](public/images/sc7.png)
 ![Screenshot 1](public/images/sc8.png)
 ![Screenshot 1](public/images/sc9.png)
+![Screenshot 1](public/images/sc10.png)
+![Screenshot 1](public/images/sc11.png)
+![Screenshot 1](public/images/sc12.png)
